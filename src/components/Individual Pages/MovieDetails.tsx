@@ -68,10 +68,10 @@ const MovDetails=()=>{
                 movie && (
                     <>
                     <Row className="m-3">
-                        <Col xs={12} lg ={3} >
+                        <Col xs={12} lg ={2} >
                            <Image src= {movie.posterurl} fluid className="photo"></Image>
                         </Col>
-                        <Col xs={12} lg ={9}>
+                        <Col xs={12} lg ={10}>
                              <h1> {movie.title}({movie.year})</h1>
                              <Row>
                              <Col xs={5} lg={3}>
@@ -85,22 +85,17 @@ const MovDetails=()=>{
                                    <div>Story Line</div>
                                    
                              </Col>
-                             <Col xs={7} lg={5}>
+                             <Col xs={7} lg={9}>
 
-                                   <div>{movie.imdbRating}</div>
-                                                                      
-                                  {movie.contentRating}&&(
-                                    <div>{movie.contentRating}</div> )
-                                  {!movie.contentRating}&&(
-                                    <div></div> )
-
-                                   
-                                   <div>{movie.averageRating}</div>
-                                   <div>{movie.duration}</div>
-                                   <div>{movie.genres.join(",")}</div>
-                                   <div>{movie.actors.join(",")}</div>
-                                   <div>{movie.releaseDate}</div>
-                                   <div>{movie.storyline}</div>
+                                  <div>:&nbsp;{movie.imdbRating}</div>         
+                                  {movie.contentRating?<div>:&nbsp;{movie.contentRating}</div>: <div> : </div> }
+                                  {movie.averageRating?<div>:&nbsp;{movie.averageRating}</div>: <div> : </div> }
+                                  {movie.duration?<div>:&nbsp;{movie.duration}</div>:<div> : </div>} 
+                                  
+                                   <div>:&nbsp;{movie.genres.join(",")}</div>
+                                   <div>:&nbsp;{movie.actors.join(",")}</div>
+                                  {movie.releaseDate?<div>:&nbsp;{movie.releaseDate}</div>:<div>:</div>} 
+                                   <div>:&nbsp;{movie.storyline}</div>
                                    
                              </Col>
 
