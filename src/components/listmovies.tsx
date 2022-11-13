@@ -13,6 +13,7 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
     const [error, setError] = useState<Error | null>(null);
     // const [query, setquery] = useState<string>("");
     console.log("List:", props.query);
+    // setquery(props.query);
     useEffect(
         () => {
             //  setquery(props.query);
@@ -29,19 +30,25 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
             }
             fetchHepler();
         },
-        []
+        [props.getmovies()]
     );
     useEffect(() => {
-        if (movies) {
-            let filtered = !props.query
-             ? movies
-             : movies.filter(movie =>
-                movie.title.toLowerCase().includes(props.query.toLowerCase())
-            );
-            // setFilteredMovies(filtered);
-            setMovies(filtered);
+        const helper= async()=>{
+            if (movies) {
+                let filtered = !props.query
+                 ? movies
+                 : movies.filter(movie =>
+                    movie.title.toLowerCase().includes(props.query.toLowerCase())
+                );
+                setFilteredMovies(filtered);
+                console.log("Filtered:",filtered);
+                console.log("filteredMovies:",filteredMovies);
+
+                // setMovies(filtered);
+            }   
         }
-    }, [props.query]);
+        helper();
+    }, [props.query,props.getmovies()]);
 
     return (
         <>
@@ -51,10 +58,10 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
                 )
             }
             {
-                movies.length != 0 && (
+                filteredMovies.length != 0 && (
                     <Row xs={2} md={3} lg={6}>
                         {
-                            movies.map(
+                            filteredMovies.map(
                                 movie => (
                                     <Col key={movie.title + movie.year + movie.id + movie.releaseDate} className="d-flex my-2">
                                         <MovieItem movieItem={movie} />
