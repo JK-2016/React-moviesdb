@@ -14,6 +14,7 @@ const getMoviesIndia = () => {
             .then( response => response.data )
 };
 const getMovies = () => {
+ 
     return axios.get<Imovie[]>(`http://localhost:3001/top-rated-movies`)
             .then( response => response.data )
 };

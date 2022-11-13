@@ -53,13 +53,13 @@
 // export default Indian_Movies;
 import { getMoviesIndia } from "../../../services/getmovies";
 import ListMovies from "../../listmovies";
-const Indian_Movies=()=>{
+const Indian_Movies=(props:{query: string})=>{
     return(
         <>
          <h1>
              Indian Movies
          </h1>
-         <ListMovies getmovies={getMoviesIndia}/>
+         <ListMovies getmovies={getMoviesIndia} query={props.query}/>
          </>     
  )
 };

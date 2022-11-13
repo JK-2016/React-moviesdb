@@ -33,9 +33,7 @@ const MovDetails=()=>{
                 try{
                     if(id!=undefined){
                         const data =  await getMovieById(id!,group!);
-                        setMovie(data);
-                       
-                       
+                        setMovie(data);  
                     }
                     else{
                         const data =  await getMovieByTitle(title!,year!,group!);
@@ -72,9 +70,9 @@ const MovDetails=()=>{
                            <Image src= {movie.posterurl} fluid className="photo"></Image>
                         </Col>
                         <Col xs={12} lg ={10}>
-                             <h1> {movie.title}({movie.year})</h1>
+                             <h1 > {movie.title}({movie.year})</h1>
                              <Row>
-                             <Col xs={5} lg={3}>
+                             <Col xs={5} lg={2}>
                                    <div>IMDB Rating</div>
                                    <div>Content Rating</div>
                                    <div>Average Rating</div>
@@ -85,7 +83,7 @@ const MovDetails=()=>{
                                    <div>Story Line</div>
                                    
                              </Col>
-                             <Col xs={7} lg={9}>
+                             <Col xs={7} lg={10}>
 
                                   <div>:&nbsp;{movie.imdbRating}</div>         
                                   {movie.contentRating?<div>:&nbsp;{movie.contentRating}</div>: <div> : </div> }

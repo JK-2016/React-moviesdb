@@ -1,13 +1,14 @@
 import { getMoviesInTheatres } from "../../../services/getmovies";
 import ListMovies from "../../listmovies";
 
-const Movies_in_theatre=()=>{
+const Movies_in_theatre=(props:{query: string})=>{
+    console.log("rerendered");
     return(
            <>
             <h1>
                 Movies in theatres
             </h1>
-            <ListMovies getmovies={getMoviesInTheatres}/>
+            <ListMovies getmovies={getMoviesInTheatres} query={props.query}/>
             </>     
     )
 };

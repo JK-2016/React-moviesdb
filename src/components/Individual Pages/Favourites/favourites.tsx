@@ -13,13 +13,13 @@
 import { getFavourites} from "../../../services/getmovies";
 import ListMovies from "../../listmovies";
 
-const Favourites=()=>{
+const Favourites=(props:{query: string})=>{
     return(
            <>
             <h1>
                Favourites
             </h1>
-            <ListMovies getmovies={getFavourites}/>
+            <ListMovies getmovies={getFavourites} query={props.query}/>
             </>     
     )
 };

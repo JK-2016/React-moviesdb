@@ -2,13 +2,13 @@
 import { getMovies } from "../../../services/getmovies";
 import ListMovies from "../../listmovies";
 
-const Movies=()=>{
+const Movies=(props:{query: string})=>{
     return(
            <>
             <h1>
                Top Rated Movies
             </h1>
-            <ListMovies getmovies={getMovies}/>
+            <ListMovies getmovies={getMovies} query={props.query}/>
             </>     
     )
 };
