@@ -55,8 +55,8 @@ function App() {
           </Form>
         </Container>
       </Navbar>
-
-      <Routes>
+     
+      {<Routes>
         <Route path="/:group/:title/:year" element={<MovDetails />} />
         <Route path="/:group/:id" element={<MovDetails />} />
         <Route path="/movies-in-theaters" element={<Movies_in_theatre query={query} />} />
@@ -65,7 +65,7 @@ function App() {
         <Route path="/top-rated-movies" element={<Movies query={query} />} />
         <Route path="/favourites" element={<Favourites query={query}></Favourites>} />
         <Route path="/" element={<Movies_in_theatre query={query} />} />
-      </Routes>
+      </Routes> }
 
 
     </>

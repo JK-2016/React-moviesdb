@@ -8,16 +8,16 @@ import { useLocation } from "react-router-dom";
 // type props={
 //     getmovies():Imovie[];
 // }
-const ListMovies = (props: { getmovies: () => any; query: string }) => {
+const ListMovies = (props: { getmovies: () => any; query: string; path: string }) => {
     const [movies, setMovies] = useState<Imovie[]>([]);
     const [filteredMovies, setFilteredMovies] = useState<Imovie[]>([]);
     const [error, setError] = useState<Error | null>(null);
-    const [path,setPath] = useState<string>("");
-    
-    setPath(useLocation().pathname);
+    // const [path,setPath] = useState<string>("");
+
     // const [query, setquery] = useState<string>("");
     // console.log("List:", props.query);
     // setquery(props.query);
+
     useEffect(
         () => {
             //  setquery(props.query);
@@ -26,7 +26,8 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
                     const data = await props.getmovies();
                     // console.log("data:",data);
                     setMovies(data);
-                     console.log("movies:",movies);
+                    setFilteredMovies(data);
+                    console.log("movies:", movies);
                 }
                 catch (error) {
                     setError(error as Error);
@@ -34,25 +35,26 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
             }
             fetchHepler();
         },
-        [path]
+        [props.path]
     );
     useEffect(() => {
-        const helper= async()=>{
-            if ( movies) {
-                let filtered = !props.query
-                 ? movies
-                 : movies.filter(movie =>
-                    movie.title.toLowerCase().includes(props.query.toLowerCase())
-                );
+        const helper = async () => {
+            console.log("queryprops:", props.query);
+            if (movies) {
+                let filtered = props.query.length === 0
+                    ? movies
+                    : movies.filter(movie =>
+                        movie.title.toLowerCase().includes(props.query.toLowerCase())
+                    );
                 setFilteredMovies(filtered);
                 // console.log("Filtered:",filtered);
-                 console.log("filteredMovies:",filteredMovies);
+                console.log("filteredMovies:", filteredMovies);
 
                 // setMovies(filtered);
-            }   
+            }
         }
         helper();
-    }, [props.query,path]);
+    }, [props.query, props.path]);
 
     return (
         <>
@@ -62,7 +64,7 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
                 )
             }
             {
-                filteredMovies.length != 0 && (
+                filteredMovies.length !== 0 && (
                     <Row xs={2} md={3} lg={6}>
                         {
                             filteredMovies.map(
@@ -75,7 +77,6 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
                         }
                     </Row>
                 )
-
 
             }
 

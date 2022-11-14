@@ -51,6 +51,7 @@
 //     )
 // };
 // export default Indian_Movies;
+import { useLocation } from "react-router-dom";
 import { getMoviesIndia } from "../../../services/getmovies";
 import ListMovies from "../../listmovies";
 const Indian_Movies=(props:{query: string})=>{
@@ -59,7 +60,7 @@ const Indian_Movies=(props:{query: string})=>{
          <h1>
              Indian Movies
          </h1>
-         <ListMovies getmovies={getMoviesIndia} query={props.query}/>
+         <ListMovies getmovies={getMoviesIndia} query={props.query} path={useLocation().pathname}/>
          </>     
  )
 };
