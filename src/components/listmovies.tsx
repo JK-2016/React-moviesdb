@@ -3,6 +3,7 @@ import { Alert, Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import Imovie from "../models/Imovie";
 import MovieItem from "./Listmovieitem";
+import { useLocation } from "react-router-dom";
 
 // type props={
 //     getmovies():Imovie[];
@@ -11,6 +12,9 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
     const [movies, setMovies] = useState<Imovie[]>([]);
     const [filteredMovies, setFilteredMovies] = useState<Imovie[]>([]);
     const [error, setError] = useState<Error | null>(null);
+    const [path,setPath] = useState<string>("");
+    
+    setPath(useLocation().pathname);
     // const [query, setquery] = useState<string>("");
     // console.log("List:", props.query);
     // setquery(props.query);
@@ -22,7 +26,7 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
                     const data = await props.getmovies();
                     // console.log("data:",data);
                     setMovies(data);
-                    // console.log("movies:",movies);
+                     console.log("movies:",movies);
                 }
                 catch (error) {
                     setError(error as Error);
@@ -30,11 +34,11 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
             }
             fetchHepler();
         },
-        [props.getmovies()]
+        [path]
     );
     useEffect(() => {
         const helper= async()=>{
-            if (movies) {
+            if ( movies) {
                 let filtered = !props.query
                  ? movies
                  : movies.filter(movie =>
@@ -42,13 +46,13 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
                 );
                 setFilteredMovies(filtered);
                 // console.log("Filtered:",filtered);
-                // console.log("filteredMovies:",filteredMovies);
+                 console.log("filteredMovies:",filteredMovies);
 
                 // setMovies(filtered);
             }   
         }
         helper();
-    }, [props.query,movies]);
+    }, [props.query,path]);
 
     return (
         <>
