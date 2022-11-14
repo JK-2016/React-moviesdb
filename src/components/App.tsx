@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Movies_in_theatre from './Individual Pages/Movies_in_theatre/movies_in_theatre'
 import ComingSoon from './Individual Pages/Comingsoon/comingsoon';
 import Favourites from './Individual Pages/Favourites/favourites';
@@ -17,13 +17,16 @@ import { SetStateAction, useState } from 'react';
 
 function App() {
   const [query, setquery] = useState("");
-  const queryChangeHandler = (event: { target: { value: SetStateAction<string>; }; }) => {
-    setquery(event.target.value);
-    // console.log(query);
-  };
-  const handleSubmit = (e:any) => {
-    e.preventDefault();
-  };
+  
+    const queryChangeHandler = (event: { target: { value: SetStateAction<string>; }; }) => {
+      setquery(event.target.value);
+      // console.log(query);
+    };
+    const handleSubmit = (e: any) => {
+      e.preventDefault();
+    };
+
+
   return (
     <>
       <Navbar expand="lg" bg="light" variant="light">
@@ -52,16 +55,16 @@ function App() {
           </Form>
         </Container>
       </Navbar>
-   
+
       <Routes>
         <Route path="/:group/:title/:year" element={<MovDetails />} />
         <Route path="/:group/:id" element={<MovDetails />} />
-        <Route path="/movies-in-theaters" element={<Movies_in_theatre query={query}/>} />
+        <Route path="/movies-in-theaters" element={<Movies_in_theatre query={query} />} />
         <Route path="/movies-coming" element={<ComingSoon query={query} />} />
-        <Route path="/top-rated-india" element={<Indian_Movies query={query}/>} />
-        <Route path="/top-rated-movies" element={<Movies query={query}/>} />
+        <Route path="/top-rated-india" element={<Indian_Movies query={query} />} />
+        <Route path="/top-rated-movies" element={<Movies query={query} />} />
         <Route path="/favourites" element={<Favourites query={query}></Favourites>} />
-        <Route path="/" element={<Movies_in_theatre  query={query}/>} />
+        <Route path="/" element={<Movies_in_theatre query={query} />} />
       </Routes>
 
 

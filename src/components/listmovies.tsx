@@ -12,7 +12,7 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
     const [filteredMovies, setFilteredMovies] = useState<Imovie[]>([]);
     const [error, setError] = useState<Error | null>(null);
     // const [query, setquery] = useState<string>("");
-    console.log("List:", props.query);
+    // console.log("List:", props.query);
     // setquery(props.query);
     useEffect(
         () => {
@@ -20,9 +20,9 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
             const fetchHepler = async () => {
                 try {
                     const data = await props.getmovies();
-                    console.log("data:",data);
+                    // console.log("data:",data);
                     setMovies(data);
-                    console.log("movies:",movies);
+                    // console.log("movies:",movies);
                 }
                 catch (error) {
                     setError(error as Error);
@@ -41,14 +41,14 @@ const ListMovies = (props: { getmovies: () => any; query: string }) => {
                     movie.title.toLowerCase().includes(props.query.toLowerCase())
                 );
                 setFilteredMovies(filtered);
-                console.log("Filtered:",filtered);
-                console.log("filteredMovies:",filteredMovies);
+                // console.log("Filtered:",filtered);
+                // console.log("filteredMovies:",filteredMovies);
 
                 // setMovies(filtered);
             }   
         }
         helper();
-    }, [props.query,props.getmovies()]);
+    }, [props.query,movies]);
 
     return (
         <>

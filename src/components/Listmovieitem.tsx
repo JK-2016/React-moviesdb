@@ -2,6 +2,7 @@ import Imovie from "../models/Imovie";
 import {Card,Button} from "react-bootstrap";
 import FavIcon from "../utils/FavouriteIcon";
 import { Link ,useLocation} from "react-router-dom";
+import axios from "axios";
 interface Props{
     movieItem:Imovie;
 }
@@ -17,6 +18,17 @@ const MovieItem=({movieItem}:Props)=>{
      path = path+'/'+movieItem.title+'/'+movieItem.year;
        
   }
+  const addToFavourites=()=>{
+    console.log("To Favs");
+    axios({
+      method: 'post',
+      url: `http://localhost:3001/favourites`,
+      data: movieItem, 
+      headers: {
+       
+      }, 
+    })
+  };
   return(
     //  <Link to = {useLocation().pathname +'/'+ movieItem.id}>
       
@@ -32,7 +44,7 @@ const MovieItem=({movieItem}:Props)=>{
           {/* <Button variant="primary">Go somewhere</Button> */}
         </Card.Body>
         </Link>
-        <div className="py-0" style={{textAlign: "center"}}>
+        <div className="py-0" style={{textAlign: "center"}} onClick={addToFavourites}>
             Add to Favourites
             <FavIcon></FavIcon>
           </div>
