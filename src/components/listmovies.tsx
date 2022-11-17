@@ -35,7 +35,7 @@ const ListMovies = (props: { getmovies: () => any; query: string; path: string }
             }
             fetchHepler();
         },
-        [props.path]
+        [props.path,movies.length]
     );
     useEffect(() => {
         const helper = async () => {
@@ -54,7 +54,7 @@ const ListMovies = (props: { getmovies: () => any; query: string; path: string }
             }
         }
         helper();
-    }, [props.query, props.path]);
+    }, [props.query, props.path,movies.length]);
 
     return (
         <>
@@ -70,7 +70,7 @@ const ListMovies = (props: { getmovies: () => any; query: string; path: string }
                             filteredMovies.map(
                                 movie => (
                                     <Col key={movie.title + movie.year + movie.id + movie.releaseDate} className="d-flex my-2">
-                                        <MovieItem movieItem={movie} />
+                                        <MovieItem movieItem={movie} movies={movies} />
                                     </Col>
                                 )
                             )

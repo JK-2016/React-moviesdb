@@ -1,14 +1,18 @@
 import Imovie from "../models/Imovie";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Alert } from "react-bootstrap";
 import FavIcon from "../utils/FavouriteIcon";
 
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { response } from "express";
 interface Props {
   movieItem: Imovie;
+  movies: Imovie[];
 }
 
-const MovieItem = ({ movieItem }: Props) => {
+const MovieItem = ({ movieItem, movies }: Props) => {
+  // const [movieSize,setmovieSize]=useState(movies.length);
   //Setting path for individual Card display
   var path = useLocation().pathname;
   // console.log("path:", path);
@@ -20,28 +24,71 @@ const MovieItem = ({ movieItem }: Props) => {
     path = path + '/' + movieItem.title + '/' + movieItem.year;
 
   }
+  const isFavourite =()=>{
+      // const [favmovies,getMovies]=useState<Imovie[]|null>(null);
+      var moviesFetched:Imovie[]=[];
+      var index:number;
+      const get = async()=>{
+         await axios.get<Imovie[]>(`http://localhost:3001/favourites`)
+             .then( (response) => {
+               moviesFetched=(response.data);
+              console.log("Favmovies in get:",moviesFetched);
+              console.log("index:",moviesFetched.indexOf(movieItem));
+              // myArray.findIndex(x => x.hello === 'stevie')
+              // index = (moviesFetched!==null)?moviesFetched.indexOf(movieItem):-1;
+                index = moviesFetched.findIndex(m => m.title===movieItem.title && m.year === movieItem.year );
+                return (index===-1)?false:true;    
+            });
+          }  ;
+       console.log("value of get():",get());
+      // moviesFetched=get();
+      index=-1;
+      console.log("Favmovies:",moviesFetched);
+      console.log("index:",index);
+      return (index===-1)?false:true; 
+  }
+
   const addToFavourites = () => {
     // console.log("To Favs");
-    axios({
+    if(isFavourite()){
+      console.log("Already exists");
+    }
+    else{
+      if(movieItem.id){
+        movieItem.id= undefined;
+      } 
+      axios({
       method: 'post',
-      url: `http://localhost:3001/favourites`,
+      url: `http://localhost:3001/favourites/?title=${movieItem.title}&year=${movieItem.year}`,
       data: movieItem,
       headers: {
 
       },
     })
   };
+}
+ 
   const removeFromFavourites = () => {
+    if(movieItem.id){
+      movieItem.id= undefined;
+    } 
     
     axios({
       method: 'delete',
-      url: `http://localhost:3001${path}`,
+      params:{title:movieItem.title, year:movieItem.year},
+      url: `http://localhost:3001/favourites/?`,
       data: movieItem,
       headers: {
 
       },
     })
+    // useEffect(()=>{
+    //    setmovieSize(movies.length-1);
+    // },[movieSize]
+    // );
   };
+
+
   return (
     //  <Link to = {useLocation().pathname +'/'+ movieItem.id}>
 
@@ -50,11 +97,6 @@ const MovieItem = ({ movieItem }: Props) => {
         <Card.Img variant="top" src={movieItem.posterurl} style={{ height: '50vh', width: '100%', objectFit: 'cover' }} />
         <Card.Body className="py-0">
           <Card.Title className="py-0" style={{ textAlign: "center" }}>{movieItem.title}</Card.Title>
-          {/* <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </Card.Text> */}
-          {/* <Button variant="primary">Go somewhere</Button> */}
         </Card.Body>
       </Link>
       {useLocation().pathname !== "/favourites"
