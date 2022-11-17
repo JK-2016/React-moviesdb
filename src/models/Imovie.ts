@@ -1,5 +1,5 @@
 interface Imovie{			
-    id?: number,
+    id: number|undefined,
    title: string,
     year: string,
     genres: string[],
