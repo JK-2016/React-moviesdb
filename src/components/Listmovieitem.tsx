@@ -6,6 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { response } from "express";
+import { render } from "react-dom";
 interface Props {
   movieItem: Imovie;
   movies: Imovie[];
@@ -24,136 +25,162 @@ const MovieItem = ({ movieItem, movies }: Props) => {
     path = path + '/' + movieItem.title + '/' + movieItem.year;
 
   }
-  const isFavourite =async ()=>{
-      // const [favmovies,getMovies]=useState<Imovie[]|null>(null);
-      var moviesFetched:Imovie[]=[];
-      var index:number|undefined = undefined;
-      const moviesF= async () => {
-        const response = await axios.get(
-          `http://localhost:3001/favourites`
-        );
-        moviesFetched = response.data;
-        console.log("data frm response:",moviesFetched);
-        index = moviesFetched.findIndex(m => m.title===movieItem.title && m.year === movieItem.year );
-        console.log("index from func:", index);
+  const isFavourite = async () => {
+    // const [favmovies,getMovies]=useState<Imovie[]|null>(null);
+    var moviesFetched: Imovie[] = [];
+    var index: number | undefined = undefined;
+    const moviesF = async () => {
+      const response = await axios.get(
+        `http://localhost:3001/favourites`
+      );
+      moviesFetched = response.data;
+      console.log("data frm response:", moviesFetched);
+      index = moviesFetched.findIndex(m => m.title === movieItem.title && m.year === movieItem.year);
+      console.log("index from func:", index);
 
-        // return response.data;
-      };
-      await moviesF();
-      return (index===-1)?false:true
-      // if(index!==undefined){
-      //   return (index===-1)?false:true; 
-      // }
-      // else{
-       
-      // }
+      // return response.data;
+    };
+    await moviesF();
+    return (index === -1) ? false : true
+    // if(index!==undefined){
+    //   return (index===-1)?false:true; 
+    // }
+    // else{
+
+    // }
 
 
 
-      // async axios.get<Imovie[]>(`http://localhost:3001/favourites`)
-      //      .then(response=>moviesFetched=response.data)
-      // const get = async()=>{
-      //    await axios.get<Imovie[]>(`http://localhost:3001/favourites`)
-      //        .then( (response) => {
-      //          moviesFetched=(response.data);
-      //         console.log("Favmovies in get:",moviesFetched);
-      //         console.log("index:",moviesFetched.indexOf(movieItem));
-      //         // myArray.findIndex(x => x.hello === 'stevie')
-      //         // index = (moviesFetched!==null)?moviesFetched.indexOf(movieItem):-1;
-      //           index = moviesFetched.findIndex(m => m.title===movieItem.title && m.year === movieItem.year );
-      //           return (index===-1)?false:true;    
-      //       });
-      //     }  ;
+    // async axios.get<Imovie[]>(`http://localhost:3001/favourites`)
+    //      .then(response=>moviesFetched=response.data)
+    // const get = async()=>{
+    //    await axios.get<Imovie[]>(`http://localhost:3001/favourites`)
+    //        .then( (response) => {
+    //          moviesFetched=(response.data);
+    //         console.log("Favmovies in get:",moviesFetched);
+    //         console.log("index:",moviesFetched.indexOf(movieItem));
+    //         // myArray.findIndex(x => x.hello === 'stevie')
+    //         // index = (moviesFetched!==null)?moviesFetched.indexOf(movieItem):-1;
+    //           index = moviesFetched.findIndex(m => m.title===movieItem.title && m.year === movieItem.year );
+    //           return (index===-1)?false:true;    
+    //       });
+    //     }  ;
 
-      //  console.log("value of get():",get());
-      // moviesFetched=get();
-      // index=-1;
-      // index = moviesFetched.findIndex(m => m.title===movieItem.title && m.year === movieItem.year );
-      // console.log(index)
-      // console.log("Favmovies:",moviesFetched);
-      // console.log("index:",index);
+    //  console.log("value of get():",get());
+    // moviesFetched=get();
+    // index=-1;
+    // index = moviesFetched.findIndex(m => m.title===movieItem.title && m.year === movieItem.year );
+    // console.log(index)
+    // console.log("Favmovies:",moviesFetched);
+    // console.log("index:",index);
   }
 
-  const addToFavourites = async() => {
+  const AddToFavourites = async () => {
     // console.log("To Favs");
-    if(await isFavourite()){
+    if (await isFavourite()) {
       console.log("Already exists");
+      return (
+        <Alert variant="danger">Already added to Favourites</Alert>
+      );
+      // alert("Already added eto Favourits");
     }
-    else{
-      if(movieItem.id){
-        movieItem.id= undefined;
-      } 
+    else {
+      if (movieItem.id) {
+        movieItem.id = undefined;
+      }
       axios({
-      method: 'post',
-      url: `http://localhost:3001/favourites/?title=${movieItem.title}&year=${movieItem.year}`,
-      data: movieItem,
-      headers: {
+        method: 'post',
+        url: `http://localhost:3001/favourites/?title=${movieItem.title}&year=${movieItem.year}`,
+        data: movieItem,
+        headers: {
 
-      },
-    })
-  };
-}
- 
+        },
+      })
+      // Alert.alert("","Succesfully added to Favourites",[],cancelable =true);
+      return (
+        <Alert variant="info">Succesfully added to Favourites</Alert>
+      );
+    };
+
+  }
+
   const removeFromFavourites = () => {
-    
-       
+
     axios({
       method: 'delete',
-      params:{title:movieItem.title, year:movieItem.year},
+      params: { title: movieItem.title, year: movieItem.year },
       url: `http://localhost:3001/favourites/${movieItem.id}`,
       data: movieItem,
       headers: {
 
       },
     })
-    // useEffect(()=>{
-    //    setmovieSize(movies.length-1);
-    // },[movieSize]
-    // );
+    // render(<ShowAlert/>,"","");
   };
-  function RemoveFavourites(){
-      const [moviesin,setmovies]=useState<Imovie[]>(movies);
-      useEffect(()=>{
-       
-            axios.get<Imovie[]>(`http://localhost:3001/favourites`)
-           .then(response=>setmovies(response.data))
-           movies=moviesin;
-        
-        //  console.log(delItem);
-      },[movies]
-      );
-      return(
-        <div className="py-0" style={{ textAlign: "center" }} onClick={removeFromFavourites}>
-        Remove From Favourites
-        </div>
-      )
 
-  }
+
+function RemoveFavourites() {
+  const [moviesin, setmovies] = useState<Imovie[]>(movies);
+  useEffect(() => {
+
+    axios.get<Imovie[]>(`http://localhost:3001/favourites`)
+      .then(response => setmovies(response.data))
+    movies = moviesin;
+
+    //  console.log(delItem);
+  }, [movies]
+  );
 
   return (
-    //  <Link to = {useLocation().pathname +'/'+ movieItem.id}>
+    <>
+      <div className="py-0" style={{ textAlign: "center" }} onClick={removeFromFavourites}>
+        Remove From Favourites
+      </div>
+    </>
+  )
 
-    <Card>
-      <Link to={path} className="mb-0">
-        <Card.Img variant="top" src={movieItem.posterurl} style={{ height: '50vh', width: '100%', objectFit: 'cover' }} />
-        <Card.Body className="py-0">
-          <Card.Title className="py-0" style={{ textAlign: "center" }}>{movieItem.title}</Card.Title>
-        </Card.Body>
-      </Link>
-      {useLocation().pathname !== "/favourites"
-        ? <div className="py-0" style={{ textAlign: "center" }} onClick={addToFavourites}>
-          Add to Favourites
-          <FavIcon></FavIcon>
-        </div>
-        : <RemoveFavourites/>
-        // <div className="py-0" style={{ textAlign: "center" }} onClick={removeFromFavourites}>
-        // Remove From Favourites
-        // </div>
-       
-      }
-    </Card>
-    // </Link>
-  );
+}
+
+function ShowAlert() {
+  const [show, setShow] = useState(true);
+
+  if (show) {
+    return (
+      <Alert variant="danger" onClose={() => setShow(false)} dismissible>
+        Removed
+      </Alert>
+    );
+  }
+  return <Button onClick={() => setShow(true)}>Show Alert</Button>;
+};
+
+
+
+
+return (
+  //  <Link to = {useLocation().pathname +'/'+ movieItem.id}>
+
+  <Card>
+    <Link to={path} className="mb-0">
+      <Card.Img variant="top" src={movieItem.posterurl} style={{ height: '50vh', width: '100%', objectFit: 'cover' }} />
+      <Card.Body className="py-0">
+        <Card.Title className="py-0" style={{ textAlign: "center" }}>{movieItem.title}</Card.Title>
+      </Card.Body>
+    </Link>
+    {useLocation().pathname !== "/favourites"
+      ? <div className="py-0" style={{ textAlign: "center" }} onClick={AddToFavourites}>
+        Add to Favourites
+        <FavIcon></FavIcon>
+      </div>
+      : <RemoveFavourites />
+      // <div className="py-0" style={{ textAlign: "center" }} onClick={removeFromFavourites}>
+      // Remove From Favourites
+      // </div>
+
+    }
+  </Card>
+  // </Link>
+);
 
 };
 
