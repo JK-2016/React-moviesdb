@@ -10,9 +10,12 @@ import { render } from "react-dom";
 interface Props {
   movieItem: Imovie;
   movies: Imovie[];
+  updatedelFav:()=>void;
+  updatesuccessalert:()=>void;
+  updatefailalert:()=>void;
 }
 
-const MovieItem = ({ movieItem, movies }: Props) => {
+const MovieItem = ({ movieItem, movies,updatedelFav,updatesuccessalert,updatefailalert }: Props) => {
   // const [movieSize,setmovieSize]=useState(movies.length);
   //Setting path for individual Card display
   var path = useLocation().pathname;
@@ -79,9 +82,10 @@ const MovieItem = ({ movieItem, movies }: Props) => {
     // console.log("To Favs");
     if (await isFavourite()) {
       console.log("Already exists");
-      return (
-        <Alert variant="danger">Already added to Favourites</Alert>
-      );
+      updatefailalert();
+      // return (
+      //   <Alert variant="danger">Already added to Favourites</Alert>
+      // );
       // alert("Already added eto Favourits");
     }
     else {
@@ -96,14 +100,11 @@ const MovieItem = ({ movieItem, movies }: Props) => {
 
         },
       })
-      // Alert.alert("","Succesfully added to Favourites",[],cancelable =true);
-      return (
-        <Alert variant="info">Succesfully added to Favourites</Alert>
-      );
+      updatesuccessalert();
     };
 
   }
-
+ 
   const removeFromFavourites = () => {
 
     axios({
@@ -115,6 +116,11 @@ const MovieItem = ({ movieItem, movies }: Props) => {
 
       },
     })
+    console.log("Size after deletion:",movies.length-1);
+    updatedelFav();
+    
+
+    // setdelFav(movies.length-1);
     // render(<ShowAlert/>,"","");
   };
 
@@ -133,9 +139,10 @@ function RemoveFavourites() {
 
   return (
     <>
-      <div className="py-0" style={{ textAlign: "center" }} onClick={removeFromFavourites}>
+      <Button variant="light" onClick={removeFromFavourites}>Remove From Favourites</Button>
+      {/* <div className="py-0" style={{ textAlign: "center" }} onClick={removeFromFavourites}>
         Remove From Favourites
-      </div>
+      </div> */}
     </>
   )
 
@@ -168,10 +175,14 @@ return (
       </Card.Body>
     </Link>
     {useLocation().pathname !== "/favourites"
-      ? <div className="py-0" style={{ textAlign: "center" }} onClick={AddToFavourites}>
+      ?<Button variant="light" onClick={AddToFavourites}>
         Add to Favourites
-        <FavIcon></FavIcon>
-      </div>
+       <FavIcon></FavIcon>
+       </Button>
+      //  <div className="py-0" style={{ textAlign: "center" }} onClick={AddToFavourites}>
+      //   Add to Favourites
+      //   <FavIcon></FavIcon>
+      // </div>
       : <RemoveFavourites />
       // <div className="py-0" style={{ textAlign: "center" }} onClick={removeFromFavourites}>
       // Remove From Favourites

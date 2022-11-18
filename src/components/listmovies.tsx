@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Imovie from "../models/Imovie";
 import MovieItem from "./Listmovieitem";
 import { useLocation } from "react-router-dom";
+import { render } from "react-dom";
 
 // type props={
 //     getmovies():Imovie[];
@@ -12,6 +13,9 @@ const ListMovies = (props: { getmovies: () => any; query: string; path: string }
     const [movies, setMovies] = useState<Imovie[]>([]);
     const [filteredMovies, setFilteredMovies] = useState<Imovie[]>([]);
     const [error, setError] = useState<Error | null>(null);
+    const [showSuccessAlert, setSuccessshowalert] = useState<boolean>(false);
+    const [showFailAlert, setshowFailalert] = useState<boolean>(false);
+    const [delFav, setdelFav] = useState<boolean>(true);
     // const [path,setPath] = useState<string>("");
 
     // const [query, setquery] = useState<string>("");
@@ -35,7 +39,7 @@ const ListMovies = (props: { getmovies: () => any; query: string; path: string }
             }
             fetchHepler();
         },
-        [props.path,movies.length]
+        [props.path, movies.length, delFav]
     );
     useEffect(() => {
         const helper = async () => {
@@ -54,7 +58,26 @@ const ListMovies = (props: { getmovies: () => any; query: string; path: string }
             }
         }
         helper();
-    }, [props.query, props.path,movies.length]);
+    }, [props.query, props.path, movies.length, delFav]);
+    var success = false, fail = false;
+    const updateafterDelete = function () {
+        // ini=val;
+        // console.log("inside parent, length:", movies.length);
+        // console.log("hi inside parent, val:",val);
+        if (delFav) {
+            setdelFav(false);
+        }
+        else {
+            setdelFav(true);
+        }
+    }
+    const ShowSuccessAlertfunc = function () {
+        setSuccessshowalert(true);
+    };
+    const ShowFailAlertfunc = function () {
+        setshowFailalert(true);
+    }
+    useEffect(() => { }, [showFailAlert, showSuccessAlert]);
 
     return (
         <>
@@ -70,15 +93,34 @@ const ListMovies = (props: { getmovies: () => any; query: string; path: string }
                             filteredMovies.map(
                                 movie => (
                                     <Col key={movie.title + movie.year + movie.id + movie.releaseDate} className="d-flex my-2">
-                                        <MovieItem movieItem={movie} movies={movies} />
+                                        <MovieItem movieItem={movie} movies={movies} updatedelFav={updateafterDelete}
+                                            updatefailalert={ShowFailAlertfunc} updatesuccessalert={ShowSuccessAlertfunc} />
                                     </Col>
+
                                 )
                             )
                         }
                     </Row>
                 )
-
             }
+
+            {
+                showSuccessAlert &&
+                <Alert variant="success" onClose={() => setSuccessshowalert(false)} dismissible
+                    className="position-fixed top-50 end-0 translate-middle"
+                >
+                    Succesfully added to Favourites
+                </Alert>
+            }
+            {
+                showFailAlert &&
+                <Alert variant="danger" onClose={() => setshowFailalert(false)} dismissible
+                    className="position-fixed top-50 end-0 translate-middle"
+                >
+                    Already exists in Favourites
+                </Alert>
+            }
+
 
         </>
     )
