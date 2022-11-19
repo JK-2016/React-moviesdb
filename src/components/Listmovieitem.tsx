@@ -162,14 +162,20 @@ function ShowAlert() {
 };
 
 
-
+const pathForImages = "../img/"
+console.log(pathForImages);
 
 return (
   //  <Link to = {useLocation().pathname +'/'+ movieItem.id}>
 
   <Card>
     <Link to={path} className="mb-0">
-      <Card.Img variant="top" src={movieItem.posterurl} style={{ height: '50vh', width: '100%', objectFit: 'cover' }} />
+      <Card.Img variant="top" src={movieItem.posterurl} 
+      onError={({ currentTarget }) => {
+        currentTarget.onerror = null; // prevents looping
+        currentTarget.src= pathForImages+movieItem.poster;
+      }}
+      style={{ height: '50vh', width: '100%', objectFit: 'cover' }} />
       <Card.Body className="py-0">
         <Card.Title className="py-0" style={{ textAlign: "center" }}>{movieItem.title}</Card.Title>
       </Card.Body>

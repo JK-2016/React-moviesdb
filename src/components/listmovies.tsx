@@ -59,7 +59,7 @@ const ListMovies = (props: { getmovies: () => any; query: string; path: string }
         }
         helper();
     }, [props.query, props.path, movies.length, delFav]);
-    var success = false, fail = false;
+    
     const updateafterDelete = function () {
         // ini=val;
         // console.log("inside parent, length:", movies.length);

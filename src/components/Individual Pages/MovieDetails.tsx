@@ -21,7 +21,7 @@ const MovDetails=()=>{
     console.log("group:"+group);
     console.log("title:"+title);
     console.log("year:"+year);
-    let lc = useLocation().pathname.indexOf('/');
+    let lc = useLocation().pathname.indexOf('/'), a=1;
     currpath = useLocation().pathname.substring(0,lc+1)+group;
     
     const [movie, setMovie] = useState<Imovie | null >(null);
@@ -31,7 +31,7 @@ const MovDetails=()=>{
       ()=>{
             const fetchHepler = async() =>{
                 try{
-                    if(id!=undefined){
+                    if(id!==undefined){
                         const data =  await getMovieById(id!,group!);
                         setMovie(data);  
                     }
@@ -48,11 +48,13 @@ const MovDetails=()=>{
                 
              }
              fetchHepler();
+             
       },
-      []
+      [currpath]
+      
    );   
-   console.log(movie?.contentRating)
-
+//    console.log(movie?.contentRating)
+ 
     return (
         <>
             <Link to = {currpath} className="m-3">Back to Home</Link>
@@ -67,7 +69,19 @@ const MovDetails=()=>{
                     <>
                     <Row className="m-3">
                         <Col xs={12} lg ={2} >
-                           <Image src= {movie.posterurl} fluid className="photo"></Image>
+                           <Image src= {movie.posterurl}
+                           onError={({ currentTarget }) => {
+                            currentTarget.onerror = null; // prevents looping
+                            // console.log('hi');
+                            // console.log(movie.poster);
+                            // console.log(movie.posterurl);
+                            
+                            currentTarget.src= "/img/"+movie.poster;
+                          }}
+                           
+                           fluid className="photo">
+
+                           </Image>
                         </Col>
                         <Col xs={12} lg ={10}>
                              <h1 > {movie.title}({movie.year})</h1>
